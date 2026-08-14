@@ -7,7 +7,7 @@ cask "insta360-quicklook" do
   desc "Native Quick Look thumbnails and previews for Insta360 .insv/.insp/.lrv"
   homepage "https://github.com/faeton/insta360-quicklook"
 
-  depends_on macos: ">= :ventura"
+  depends_on macos: :ventura
 
   app "Insta360QuickLook.app"
 
