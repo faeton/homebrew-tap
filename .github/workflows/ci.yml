@@ -97,6 +97,10 @@ jobs:
       - name: install the CLI on Linux and run it
         run: |
           dest="$(brew --repository)/Library/Taps/faeton/homebrew-tap"
+          # rm -rf first, exactly as the macOS jobs do. setup-homebrew leaves
+          # the tap directory in place, and `cp -R src existing_dir` copies
+          # *into* it rather than over it, producing a nested homebrew-tap.
+          rm -rf "$dest"
           mkdir -p "$(dirname "$dest")"; cp -R "$GITHUB_WORKSPACE" "$dest"
           brew install faeton/tap/dishwatch
           dishwatch --version
