@@ -99,18 +99,16 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: Homebrew/actions/setup-homebrew@master
-      # Install the formula file directly rather than staging it into the tap
-      # directory. setup-homebrew owns that path — it puts a symlink there and
-      # its post-job cleanup removes it with a plain `rm`, which fails once you
-      # have replaced it with a real directory. The macOS jobs can copy freely
-      # because they use the preinstalled Homebrew and that action never runs.
-      #
-      # Tap-name resolution is already covered by the audit job on macOS; what
-      # is untested on Linux, and the whole reason for this job, is whether the
-      # formula's on_linux block actually installs and the binary runs.
+      # No staging: setup-homebrew already symlinks this checkout in as
+      # faeton/tap, so the tap-qualified name resolves as-is. Copying over that
+      # path is what broke the two previous attempts — first nesting the repo
+      # inside itself, then leaving a real directory where the action's
+      # post-job cleanup expected the symlink it had made. And a formula cannot
+      # be installed from a bare path at all; Homebrew requires it to be in a
+      # tap.
       - name: install the CLI on Linux and run it
         run: |
-          brew install --formula "$GITHUB_WORKSPACE/Formula/dishwatch.rb"
+          brew install faeton/tap/dishwatch
           dishwatch --version
           sl --version
           sl --help >/dev/null
