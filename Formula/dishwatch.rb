@@ -49,7 +49,7 @@ class Dishwatch < Formula
   end
 
   test do
-    system "#{bin}/dishwatch", "--help"
-    system "#{bin}/sl", "--help"
+    system bin/"dishwatch", "--version"
+    system bin/"sl", "--help"
   end
 end
