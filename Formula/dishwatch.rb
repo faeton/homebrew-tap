@@ -5,13 +5,13 @@
 class Dishwatch < Formula
   desc "Starlink dish status, dashboard and power-bank CLI over local gRPC"
   homepage "https://github.com/faeton/dishwatch"
-  version "0.2.5"
+  version "0.2.6"
   license "MIT"
 
   on_macos do
     if Hardware::CPU.intel?
-      url "https://github.com/faeton/dishwatch/releases/download/v0.2.5/dishwatch_Darwin_x86_64.tar.gz"
-      sha256 "452eb7557c16e8b96e12bc4bd3eec62fb43df960580b0cc7fb6d9f02c921c6af"
+      url "https://github.com/faeton/dishwatch/releases/download/v0.2.6/dishwatch_Darwin_x86_64.tar.gz"
+      sha256 "f31cf8faf852d664c6d7802f9498425b6be29ab86b892940ab475ed60fda5951"
 
       define_method(:install) do
         bin.install "dishwatch"
@@ -19,8 +19,8 @@ class Dishwatch < Formula
       end
     end
     if Hardware::CPU.arm?
-      url "https://github.com/faeton/dishwatch/releases/download/v0.2.5/dishwatch_Darwin_arm64.tar.gz"
-      sha256 "afa93cd451d8ac44475874c2b16903f84f7cd1a752ae26837dc8ddc5ddb1d744"
+      url "https://github.com/faeton/dishwatch/releases/download/v0.2.6/dishwatch_Darwin_arm64.tar.gz"
+      sha256 "d2908057e6fd1c67528a4c96c2b8a670492e48785e6ad31a007db280a2999d30"
 
       define_method(:install) do
         bin.install "dishwatch"
@@ -31,16 +31,16 @@ class Dishwatch < Formula
 
   on_linux do
     if Hardware::CPU.intel? && Hardware::CPU.is_64_bit?
-      url "https://github.com/faeton/dishwatch/releases/download/v0.2.5/dishwatch_Linux_x86_64.tar.gz"
-      sha256 "66a147baf04e6c003dcafac0a273b3c14fe2228069bbee480a25d4f4acfd297b"
+      url "https://github.com/faeton/dishwatch/releases/download/v0.2.6/dishwatch_Linux_x86_64.tar.gz"
+      sha256 "4b8fcdcfc37c6d5858073cfb2a70d73c0f50a06205ba02d6db5c231dcee79ebb"
       define_method(:install) do
         bin.install "dishwatch"
         bin.install_symlink "dishwatch" => "sl"
       end
     end
     if Hardware::CPU.arm? && Hardware::CPU.is_64_bit?
-      url "https://github.com/faeton/dishwatch/releases/download/v0.2.5/dishwatch_Linux_arm64.tar.gz"
-      sha256 "66232a558b931b4bf148d40e47e37ace2da0e1b0a6b7ecad4bd79747578d563d"
+      url "https://github.com/faeton/dishwatch/releases/download/v0.2.6/dishwatch_Linux_arm64.tar.gz"
+      sha256 "e55938d5db199c00f0a0ef3980e4cbe9aacaf60665f66da9700f4c03a4abc4bb"
       define_method(:install) do
         bin.install "dishwatch"
         bin.install_symlink "dishwatch" => "sl"
