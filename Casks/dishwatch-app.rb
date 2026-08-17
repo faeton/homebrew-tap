@@ -1,6 +1,8 @@
-# The notarized DishWatch menu-bar app. Source of truth for this file is
-# packaging/dishwatch-app.rb in faeton/dishwatch; update both together. The
-# sha256 comes from the release's checksums.txt, which includes the DMG.
+# Homebrew cask for the notarized macOS app, and the source of truth for
+# faeton/homebrew-tap:Casks/dishwatch-app.rb. Do not edit the tap's copy — run
+# `make cask` (after the DMG is uploaded), which renders this file with the
+# version and DMG sha256 read out of the published release's checksums.txt.
+# The version and sha256 below are placeholders that rendering overwrites.
 #
 # Hand-written rather than goreleaser-generated: goreleaser can only wrap
 # artifacts it built, and the DMG comes from app/Makefile with two notarization
@@ -36,6 +38,10 @@ cask "dishwatch-app" do
 
   # Matches LSMinimumSystemVersion in app/Resources/Info.plist and the
   # .macOS(.v14) platform in app/Package.swift. Keep all three in step.
+  #
+  # A bare symbol already means "this version or newer" — MacOSRequirement.parse
+  # defaults to the `>=` comparator. The `">= :sonoma"` string spelling is the
+  # deprecated form and warns.
   depends_on macos: :sonoma
 
   app "DishWatch.app"
