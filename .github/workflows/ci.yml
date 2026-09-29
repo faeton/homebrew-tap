@@ -32,7 +32,7 @@ jobs:
   audit:
     runs-on: macos-15
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: tap this checkout
         run: |
@@ -141,9 +141,26 @@ jobs:
             name="$(basename "$f" .rb)"
             n=$((n + 1))
             echo "== auditing $name"
-            brew audit --formula --online --strict "faeton/tap/$name" \
-              && echo "   clean" \
-              || echo "::warning title=formula lint::brew audit --strict flagged $name (see log)"
+            # goreleaser's formula template writes `version` unconditionally
+            # and has no setting to leave it out, so --strict calls it
+            # redundant with the version in the URL on every release. It is
+            # set aside here, since it cannot be fixed at the source. Anything
+            # else still warns.
+            out="$(brew audit --formula --online --strict "faeton/tap/$name" 2>&1)" && {
+              echo "   clean"
+              continue
+            }
+            printf '%s\n' "$out"
+            problems="$(printf '%s\n' "$out" | sed -n 's/^ *\* //p')"
+            others="$(printf '%s\n' "$problems" \
+                        | grep -v "is redundant with version scanned from URL" || true)"
+            # No `* ` lines at all means brew's output changed shape; that must
+            # not read as "only the known problem".
+            if [ -z "$problems" ] || [ -n "$others" ]; then
+              echo "::warning title=formula lint::brew audit --strict flagged $name (see log)"
+            else
+              echo "   clean apart from goreleaser's redundant \`version\`"
+            fi
           done
           echo "audited $n formula(e)"
           test "$n" -gt 0 || { echo "ERROR: no formulae matched Formula/*.rb" >&2; exit 1; }
@@ -210,7 +227,7 @@ jobs:
     runs-on: macos-15
     needs: audit
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: tap this checkout
         run: |
@@ -260,7 +277,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: audit
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - uses: Homebrew/actions/setup-homebrew@main
       # No staging: setup-homebrew already symlinks this checkout in as
       # faeton/tap, so the tap-qualified name resolves as-is. Copying over that
