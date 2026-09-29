@@ -261,7 +261,7 @@ jobs:
     needs: audit
     steps:
       - uses: actions/checkout@v4
-      - uses: Homebrew/actions/setup-homebrew@master
+      - uses: Homebrew/actions/setup-homebrew@main
       # No staging: setup-homebrew already symlinks this checkout in as
       # faeton/tap, so the tap-qualified name resolves as-is. Copying over that
       # path is what broke the two previous attempts — first nesting the repo
