@@ -150,7 +150,10 @@ jobs:
               echo "   clean"
               continue
             }
-            printf '%s\n' "$out"
+            # brew emits its own ::error:: workflow command, which would put a
+            # red annotation on a known, set-aside problem. Defuse it in the
+            # echo; a real problem gets the ::warning below instead.
+            printf '%s\n' "$out" | sed 's/^::error::/error: /'
             problems="$(printf '%s\n' "$out" | sed -n 's/^ *\* //p')"
             others="$(printf '%s\n' "$problems" \
                         | grep -v "is redundant with version scanned from URL" || true)"
