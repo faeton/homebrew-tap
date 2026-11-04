@@ -23,8 +23,8 @@
 # blocks. (Casks themselves are no longer macOS-only — only the `app` artifact
 # is — so that is not the reason.)
 cask "dishwatch-app" do
-  version "0.2.13"
-  sha256 "34bd537bbb6e91ff69894cd4429ef232210e78cd0ebc5d9bd7c922d33a33a886"
+  version "0.2.14"
+  sha256 "13fed3477de8220cc537cca7eb0ed665749665f1bbbecc8db1b51de59e5f6207"
 
   url "https://github.com/faeton/dishwatch/releases/download/v#{version}/DishWatch-#{version}.dmg"
   name "DishWatch"
