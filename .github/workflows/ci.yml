@@ -27,6 +27,11 @@ env:
   # exhausts. The runner's own token lifts it; without this the job fails on
   # rate limits rather than on anything wrong with the tap.
   HOMEBREW_GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  # brew forces colour whenever GITHUB_ACTIONS is set, even into a pipe, and the
+  # audit below parses its output: ` \e[31m-\e[0m Version...` is not a ` - `
+  # line. NO_COLOR outranks that. Without it the cask grace period never ran,
+  # and every release went red waiting for its cask.
+  HOMEBREW_NO_COLOR: 1
 
 jobs:
   audit:
@@ -79,7 +84,10 @@ jobs:
               printf '%s\n' "$out"
               continue
             }
-            printf '%s\n' "$out"
+            # brew emits its own ::error:: workflow command, which would put a
+            # red annotation on a run the grace period lets through. A real
+            # failure still goes red through rc.
+            printf '%s\n' "$out" | sed 's/^::error::/error: /'
 
             # Problems are the ` - ` lines. Parse them out and set the
             # livecheck-version ones aside; anything else is fatal as before.
