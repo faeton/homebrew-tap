@@ -16,10 +16,6 @@ on:
   workflow_dispatch:
 
 env:
-  # Homebrew now asks for explicit trust before running commands from a tap.
-  # This workflow audits our own tap inside our own CI, where there is no third
-  # party to trust and the prompt has nowhere to go.
-  HOMEBREW_NO_REQUIRE_TAP_TRUST: 1
   HOMEBREW_NO_ANALYTICS: 1
   HOMEBREW_NO_AUTO_UPDATE: 1
   # `brew audit --online` resolves GitHub URLs, and unauthenticated runners get
@@ -41,6 +37,9 @@ jobs:
 
       - name: tap this checkout
         run: |
+          # Homebrew refuses to load a non-official tap until it is trusted, and
+          # that trust lives on the machine, so every job starts by granting it.
+          brew trust --tap faeton/tap
           # Audit the working copy, not whatever is already installed.
           brew tap-new faeton/tap --no-git 2>/dev/null || true
           dest="$(brew --repository faeton/tap)"
@@ -242,6 +241,7 @@ jobs:
 
       - name: tap this checkout
         run: |
+          brew trust --tap faeton/tap
           dest="$(brew --repository faeton/tap)"
           rm -rf "$dest"; mkdir -p "$(dirname "$dest")"
           cp -R "$GITHUB_WORKSPACE" "$dest"
@@ -299,6 +299,7 @@ jobs:
       # tap.
       - name: install the CLI on Linux and run it
         run: |
+          brew trust --tap faeton/tap
           brew install faeton/tap/dishwatch
           dishwatch --version
           sl --version
